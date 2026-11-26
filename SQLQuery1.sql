@@ -46,7 +46,7 @@ UPDATE dbo.Pagamento SET data_pagamento = '20261120', situacao = 'Pago' where id
 DELETE FROM dbo.Pagamento WHERE id_pagamento = 9007
 select * from dbo.Pagamento
 -- Exercicio 9
-EXEC dbo.PrepararQuestao 10
+EXEC dbo.PrepararQuestao 9
 GO
 CREATE TABLE dbo.Monitoria (id_monitoria int not null, id_turma int not null, codigo varchar(20) not null, horas int not null, data_inicio date not null, situacao varchar(20) not null,
 
@@ -58,7 +58,40 @@ CONSTRAINT PK_Monitoria PRIMARY KEY (id_monitoria),
 
 );
 
+-- Exercicio 10
+EXEC dbo.PrepararQuestao 10
+GO
 insert into dbo.Monitoria values (1, 10, 'MON-001', 8, '20261121', 'Planejada')
 select * from dbo.Monitoria
 
 
+-- Exercicio 11
+EXEC dbo.PrepararQuestao 11
+GO
+select t.nome, m.id_matricula from dbo.Turma t INNER JOIN dbo.Matricula m on  t.id_turma = m.id_turma where m.nota is null and t.turno = 'noite'
+order by t.nome, m.id_matricula
+
+-- Exercicio 12
+EXEC dbo.PrepararQuestao 12
+GO
+select a.nome as aluno, t.nome, m.nota from dbo.Aluno a inner join dbo.Matricula m on a.ra = m.ra_aluno inner join dbo.Turma t on m.id_turma = t.id_turma
+where m.nota >= 8 and t.turno = 'noite'
+order by t.nome, a.nome
+
+-- Exercicio 13
+EXEC dbo.PrepararQuestao 13
+GO
+select a.nome, p.valor, p.data_pagamento from dbo.Aluno a inner join dbo.Pagamento p on a.ra = p.ra_aluno where situacao = 'Pago' and data_pagamento is not null and a.cidade = 'Joinville'
+order by data_pagamento asc, nome
+
+-- Exercicio 14
+EXEC dbo.PrepararQuestao 14
+GO
+select a.nome, count(m.id_matricula) as total_matriculas from dbo.Aluno a inner join dbo.Matricula m on a.ra = m.ra_aluno
+group by a.ra, a.nome
+having count(m.id_matricula) >=2 order by nome
+
+-- Exercicio 15
+ EXEC dbo.PrepararQuestao 15
+ GO
+ select 
