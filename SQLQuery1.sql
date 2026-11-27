@@ -87,11 +87,36 @@ order by data_pagamento asc, nome
 -- Exercicio 14
 EXEC dbo.PrepararQuestao 14
 GO
-select a.nome, count(m.id_matricula) as total_matriculas from dbo.Aluno a inner join dbo.Matricula m on a.ra = m.ra_aluno
+select a.nome as aluno, count(a.ra) as total_matriculas from dbo.Aluno a inner join dbo.Matricula m on a.ra = m.ra_aluno
 group by a.ra, a.nome
-having count(m.id_matricula) >=2 order by nome
+having count(a.ra) >=2 
+order by nome
 
 -- Exercicio 15
- EXEC dbo.PrepararQuestao 15
- GO
- select 
+EXEC dbo.PrepararQuestao 15
+GO
+select t.nome, count(m.nota) as notas_lancadas, cast(AVG(m.nota) as decimal (10,2)) as media 
+from dbo.Turma t inner join dbo.Matricula m on t.id_turma = m.id_turma where m.nota is not null
+group by t.id_turma, t.nome
+having count(m.nota) >= 2 and AVG(m.nota) >= 8
+order by media desc, t.nome asc
+
+-- Exercicio 16
+EXEC dbo.PrepararQuestao 16
+GO
+select top 2 t.nome, count(*) as total_matriculas from dbo.Turma t inner join dbo.Matricula m
+on t.id_turma = m.id_turma  
+group by t.id_turma, t.nome
+order by total_matriculas desc, t.id_turma asc
+
+-- Exercicio 17
+EXEC dbo.PrepararQuestao 17
+GO
+select a.cidade, count(*) as qtd_pagamentos, cast(sum(p.valor) as decimal(10,2)) as total_recebido from dbo.Aluno a
+inner join dbo.Pagamento p on a.ra = p.ra_aluno where p.situacao = 'Pago' and p.data_pagamento is not null
+group by a.cidade
+having sum(p.valor) >= 250
+order by qtd_pagamentos desc
+
+-- Exercicio 18
+
